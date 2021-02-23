@@ -47,6 +47,14 @@
                         </tr>
                         {% endfor %}
 
+                        <tr>
+                            <td id="name"><b>Total</b></td>
+                            <td id="totalCarbs"><b></b></td>
+                            <td id="totalProteins"><b></b></td>
+                            <td id="totalFats"><b></b></td>
+                            <td id="totalCalories"><b></b></td>
+                        </tr>
+
                     </table>
                 </div>
             </div>
@@ -56,4 +64,20 @@
             </div>
         </div>
     </body>
+    <script>
+        var table = document.getElementById("table");
+        var carbs=0, proteins=0, fats=0, calories=0;
+
+        for(var i=1; i<table.rows.length-1; i++){
+           carbs += parseFloat(table.rows[i].cells[1].innerHTML);
+           proteins += parseFloat(table.rows[i].cells[2].innerHTML);
+           fats += parseFloat(table.rows[i].cells[3].innerHTML);
+           calories += parseFloat(table.rows[i].cells[4].innerHTML);
+        }
+        document.getElementById("totalCarbs").innerHTML = Math.round(carbs);
+        document.getElementById("totalProteins").innerHTML = Math.round(proteins);
+        document.getElementById("totalFats").innerHTML = Math.round(fats);
+        document.getElementById("totalCalories").innerHTML = Math.round(calories); 
+    </script>
+
 </html>
