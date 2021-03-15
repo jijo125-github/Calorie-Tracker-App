@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     </head>
     <body>
         <div class="container">
@@ -47,6 +48,7 @@
                             <th>Proteins(gm)</th>
                             <th>Fats(gm)</th>
                             <th>Calories(Kcal)</th>
+                            <th>Remove Item</th>
                         </tr>
 
                         {% for con_food in consumed %}
@@ -56,6 +58,7 @@
                             <td>{{  con_food.food_consumed.protein }}</td>
                             <td>{{  con_food.food_consumed.fats }}</td>
                             <td>{{  con_food.food_consumed.calories }}</td>
+                            <td><a class="btn btn-danger" href="{% url 'delete' con_food.id %}">X</a></td>
                         </tr>
                         {% endfor %}
 
@@ -69,14 +72,22 @@
 
                     </table>
                 </div>
-            </div>
 
-            <div class="col-md-5 offset-1">
-
-            </div>
+                <div class="col-md-5 offset-1">
+                    <div class="">
+                        <h4>Today's breakdown</h4>
+                    </div>
+                    <div class="card-header text-white bg-primary">
+                        <h4>Macronutrients breakdown</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
         </div>
     </body>
-    <script>
+    
+    <script >
         var table = document.getElementById("table");
         var carbs=0, proteins=0, fats=0, calories=0;
 
@@ -92,6 +103,35 @@
         document.getElementById("totalCalories").innerHTML = Math.round(calories) + "(Kcal)"; 
         var calPer = (calories / 5000) * 100;
         document.getElementsByClassName("progress-bar")[0].setAttribute("style","width:" + calPer + "%");
+
+        var total = carbs + proteins + fats;
+        var carbsP = Math.round((carbs/total)*100);
+        var proteinP = Math.round((proteins/total)*100);
+        var fatsP = Math.round((fats/total)*100);
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Carbs ' + carbsP + '%', 'Protein ' + proteinP + '%', 'Fats ' + fatsP + '%'],
+        datasets: [{
+            label: '# of Votes',
+            data: [carbsP, proteinP, fatsP],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+});
     </script>
 
 </html>
